@@ -2,8 +2,11 @@
 #include <pthread.h> 
 #include "led-matrix-connector/led-matrix-connector/led-matrix-connector.h"
 
+pthread_t thread_id;
+
 void myExit()
 {
+	pthread_cancel(thread_id);
 	LedClear();
 	printf("\n");
 	return;
@@ -11,7 +14,6 @@ void myExit()
 
 void end_program (GtkWidget *wid, gpointer ptr)
 {
-	myExit();
 	gtk_main_quit ();
 }
 
@@ -22,7 +24,6 @@ void *display_thread(void *vargp)
 
 void display (GtkWidget *wid, gpointer ptr)
 {
-	pthread_t thread_id;
 	pthread_create(&thread_id, NULL, display_thread, NULL);
 	pthread_detach(thread_id);
 }
