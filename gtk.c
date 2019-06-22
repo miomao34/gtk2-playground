@@ -2,6 +2,7 @@
 #include <pthread.h> 
 #include "led-matrix-connector/led-matrix-connector/led-matrix-connector.h"
 
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t thread_id;
 
 void myExit()
@@ -19,7 +20,9 @@ void end_program (GtkWidget *wid, gpointer ptr)
 
 void *display_thread(void *vargp)
 {
+	pthread_mutex_lock(&mutex);
 	LedRenderText("TEST MSG", 300);
+	pthread_mutex_unlock(&mutex);
 }
 
 void display (GtkWidget *wid, gpointer ptr)
